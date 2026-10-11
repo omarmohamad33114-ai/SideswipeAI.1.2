@@ -22,10 +22,11 @@ jobs:
       - name: Android SDK
         run: |
           SDK="${ANDROID_HOME:-$ANDROID_SDK_ROOT}"
-          echo "SDK at: $SDK"
+          SDKM="$(find "$SDK" -name sdkmanager -type f | head -n1)"
+          echo "sdkmanager at: $SDKM"
           sudo chown -R "$USER" "$SDK"
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          yes | "$SDKM" --sdk_root="$SDK" --licenses > /dev/null || true
+          "$SDKM" --sdk_root="$SDK" "platforms;android-35" "build-tools;35.0.0"
 
       - uses: gradle/actions/setup-gradle@v4
         with:
